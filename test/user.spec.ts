@@ -65,17 +65,69 @@ describe('UserController', () => {
     });
 
     it('should be rejected when username exists', async () => {
+      await testService.createUser();
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
-          username: 'test-exist',
-          password: 'test-exist',
-          name: 'test-exist',
+          username: 'test',
+          password: 'test',
+          name: 'test',
         });
 
       logger.info(response.body);
 
       expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+  });
+
+  describe('POST /api/users/login', () => {
+    beforeEach(async () => {
+      await testService.deleteUser();
+      await testService.createUser();
+    });
+
+    it('should be rejected if request invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: '',
+          password: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be able to login', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: 'test',
+          password: 'test',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.username).toBe('test');
+      expect(response.body.data.name).toBe('test');
+      expect(response.body.data.token).toBeDefined();
+    });
+
+    it('should be rejected when username or password wrong', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: 'test-exist',
+          password: 'test-exist',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(401);
       expect(response.body.errors).toBeDefined();
     });
   });
