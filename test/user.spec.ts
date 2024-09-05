@@ -29,10 +29,6 @@ describe('UserController', () => {
       await testService.deleteUser();
     });
 
-    afterEach(async () => {
-      await testService.deleteUser();
-    });
-
     it('should be rejected if request invalid', async () => {
       const response = await request(app.getHttpServer())
         .post('/api/users')
