@@ -7,6 +7,7 @@ import {
   AddressResponse,
   CreateAddressRequest,
   GetAddressRequest,
+  UpdateAddressRequest,
 } from '../model/address.model';
 import { Logger } from 'winston';
 import { AddressValidation } from './address.validation';
@@ -30,6 +31,24 @@ export class AddressService {
       country: address.country,
       postal_code: address.postal_code,
     };
+  }
+
+  private async getAddressExist(
+    contactId: number,
+    addressId: number,
+  ): Promise<Address> {
+    const address = await this.prismaService.address.findFirst({
+      where: {
+        id: addressId,
+        contact_id: contactId,
+      },
+    });
+
+    if (!address) {
+      throw new HttpException('Address is not found', 404);
+    }
+
+    return address;
   }
 
   async create(
@@ -72,16 +91,44 @@ export class AddressService {
       getRequest.contact_id,
     );
 
-    const address = await this.prismaService.address.findFirst({
-      where: {
-        id: getRequest.address_id,
-        contact_id: getRequest.contact_id,
-      },
-    });
+    const address = await this.getAddressExist(
+      getRequest.contact_id,
+      getRequest.address_id,
+    );
 
-    if (!address) {
-      throw new HttpException('Address is not found', 404);
-    }
+    return this.toAddressResponse(address);
+  }
+
+  async update(
+    user: User,
+    request: UpdateAddressRequest,
+  ): Promise<AddressResponse> {
+    this.logger.debug(
+      `AddressService.update ${user.username}, ${JSON.stringify(request)}`,
+    );
+
+    const updateRequest = this.validationService.validate(
+      AddressValidation.UPDATE,
+      request,
+    );
+
+    await this.contactService.getContactExist(
+      user.username,
+      updateRequest.contact_id,
+    );
+
+    let address = await this.getAddressExist(
+      updateRequest.contact_id,
+      updateRequest.id,
+    );
+
+    address = await this.prismaService.address.update({
+      where: {
+        id: address.id,
+        contact_id: address.contact_id,
+      },
+      data: updateRequest,
+    });
 
     return this.toAddressResponse(address);
   }
