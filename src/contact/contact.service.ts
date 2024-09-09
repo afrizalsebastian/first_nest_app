@@ -31,10 +31,7 @@ export class ContactService {
     };
   }
 
-  private async getContactExist(
-    username: string,
-    contactId: number,
-  ): Promise<Contact> {
+  async getContactExist(username: string, contactId: number): Promise<Contact> {
     const contact = await this.prismaService.contact.findFirst({
       where: {
         id: contactId,

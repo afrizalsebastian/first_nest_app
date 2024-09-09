@@ -7,7 +7,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { TestService } from './test.service';
 import { TestModule } from './test.module';
 
-describe('UserController', () => {
+describe('ContactController', () => {
   let app: INestApplication;
   let logger: Logger;
   let testService: TestService;
@@ -42,7 +42,7 @@ describe('UserController', () => {
           phone: '',
         });
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
@@ -59,7 +59,7 @@ describe('UserController', () => {
           phone: '0234234',
         });
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(201);
       expect(response.body.data.id).toBeDefined();
@@ -85,7 +85,7 @@ describe('UserController', () => {
         .get(`/api/contacts/${contact.id + 1}`)
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(404);
       expect(response.body.errors).toBeDefined();
@@ -97,7 +97,7 @@ describe('UserController', () => {
         .get(`/api/contacts/${contact.id}`)
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.id).toBeDefined();
@@ -129,7 +129,7 @@ describe('UserController', () => {
           phone: '',
         });
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
@@ -147,7 +147,7 @@ describe('UserController', () => {
           phone: '02342345',
         });
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(404);
       expect(response.body.errors).toBeDefined();
@@ -165,7 +165,7 @@ describe('UserController', () => {
           phone: '02342345',
         });
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(201);
       expect(response.body.data.id).toBeDefined();
@@ -191,7 +191,7 @@ describe('UserController', () => {
         .delete(`/api/contacts/${contact.id + 1}`)
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(404);
       expect(response.body.errors).toBeDefined();
@@ -203,7 +203,7 @@ describe('UserController', () => {
         .delete(`/api/contacts/${contact.id}`)
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBe(true);
@@ -224,7 +224,7 @@ describe('UserController', () => {
         .get(`/api/contacts`)
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(1);
@@ -238,7 +238,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(1);
@@ -252,7 +252,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(0);
@@ -266,7 +266,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(1);
@@ -280,7 +280,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(0);
@@ -294,7 +294,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(1);
@@ -308,7 +308,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(0);
@@ -323,7 +323,7 @@ describe('UserController', () => {
         })
         .set('Authorization', 'test');
 
-      logger.info(response.body);
+      logger.debug(response.body);
 
       expect(response.status).toBe(200);
       expect(response.body.data.length).toBe(0);
